@@ -158,16 +158,25 @@
     const toggleListBtn = document.getElementById('toggleListBtn');
     const questionListEl = document.getElementById('questionList');
 
-   function drawQuestion() {
+  function drawQuestion() {
       const eixo = document.getElementById('axisSelect').value;
       const filtered = questions.filter(q => q.eixo === eixo);
       const selectedIndex = Math.floor(Math.random() * filtered.length);
       const selected = filtered[selectedIndex];
-      const questionNumber = questions.findIndex(q => q.text === selected.text) + 1;
+      const questionsInEixo = questions.filter(q => q.eixo === eixo);
+      const questionNumber = questionsInEixo.findIndex(q => q.text === selected.text) + 1;
     
       document.getElementById('questionDisplay').textContent = `Pergunta ${questionNumber}: ${selected.text}`;
       document.getElementById('questionTimestamp').textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
     }
+    
+    document.getElementById('drawQuestionBtn').addEventListener('click', drawQuestion);
+    document.getElementById('toggleListBtn').addEventListener('click', () => {
+      const questionListEl = document.getElementById('questionList');
+      const isHidden = questionListEl.style.display === 'none' || !questionListEl.style.display;
+      questionListEl.style.display = isHidden ? 'block' : 'none';
+      document.getElementById('toggleListBtn').textContent = isHidden ? 'Ocultar todas as perguntas' : 'Mostrar todas as perguntas';
+    });
     function clearQuestion() {
       questionDisplayEl.textContent = '--';
       questionTimestampEl.textContent = '';
