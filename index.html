@@ -170,13 +170,6 @@
       document.getElementById('questionTimestamp').textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
     }
     
-    document.getElementById('drawQuestionBtn').addEventListener('click', drawQuestion);
-    document.getElementById('toggleListBtn').addEventListener('click', () => {
-      const questionListEl = document.getElementById('questionList');
-      const isHidden = questionListEl.style.display === 'none' || !questionListEl.style.display;
-      questionListEl.style.display = isHidden ? 'block' : 'none';
-      document.getElementById('toggleListBtn').textContent = isHidden ? 'Ocultar todas as perguntas' : 'Mostrar todas as perguntas';
-    });
     function clearQuestion() {
       questionDisplayEl.textContent = '--';
       questionTimestampEl.textContent = '';
