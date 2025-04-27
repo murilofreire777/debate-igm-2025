@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorteio Diretor IGM/Fiocruz Bahia</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; }
+    .header { text-align: center; padding: 20px; background-color: #f5f5f5; }
+    .header h1 { margin: 0; font-size: 1.5em; }
+    .header .subtitle { margin-top: 5px; font-size: 0.9em; color: #666; }
+    .container { display: flex; height: calc(100vh - 100px); }
+    .section { flex: 3; padding: 20px; box-sizing: border-box; border-right: 1px solid #ccc; overflow-y: auto; }
+    #section2 { flex: 4; }
+    #section3 { flex: 4; }
+    .section:last-child { border-right: none; }
+    .section h2 { margin-top: 0; }
+    .section p.description { margin: 5px 0 15px 0; font-size: 0.85em; color: #555; }
+    .candidate-list { list-style: none; padding: 0; }
+    .candidate-list li { margin: 5px 0; }
+    .question-list { display: none; margin-top: 10px; list-style: disc; font-size: 0.8em; padding-left: 20px; }
+    .question-list li { margin: 4px 0; }
+    .question-list strong { display: block; list-style: none; margin-top: 10px; font-size: 1em; }
+    .result, #questionDisplay, #numberResult { margin: 20px 0; font-size: 1.2em; font-weight: bold; }
+    .timestamp, #questionTimestamp, #numberTimestamp { font-size: 0.8em; color: #666; }
+    button, select, input[type="number"] { padding: 8px 12px; font-size: 1em; cursor: pointer; margin-right: 5px; }
+    #toggleListBtn { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Eleições para diretor do IGM/Fiocruz Bahia, quadriênio 2025-2029</h1>
+    <div class="subtitle">Desenvolvido por comissão eleitoral do IGM</div>
+  </div>
+  <div class="container">
+    <div class="section" id="section1">
+      <h2>Sortear Candidato</h2>
+      <p class="description">Realiza o sorteio aleatório entre os candidatos.</p>
+      <button id="drawBtn">Sortear</button>
+      <button id="clearBtn">Reiniciar</button>
+      <div class="result" id="result">--</div>
+      <div class="timestamp" id="timestamp"></div>
+      <ul class="candidate-list" id="candidateList"></ul>
+    </div>
+    <div class="section" id="section2">
+      <h2>Perguntas aos candidatos</h2>
+      <p class="description">Sorteia perguntas organizadas por eixo temático.</p>
+      <label for="axisSelect">Eixo:</label>
+      <select id="axisSelect">
+        <option value="Gestão">Gestão</option>
+        <option value="Pesquisa">Pesquisa</option>
+        <option value="Ensino">Ensino</option>
+      </select>
+      <button id="drawQuestionBtn">Sortear Pergunta</button>
+      <button id="clearQuestionBtn">Reiniciar</button>
+      <div id="questionDisplay">--</div>
+      <div id="questionTimestamp" class="timestamp"></div>
+      <button id="toggleListBtn">Mostrar todas as perguntas</button>
+      <ul class="question-list" id="questionList"></ul>
+    </div>
+    <div class="section" id="section3">
+        <h2>Sortear Número</h2>
+        <p class="description">Gera um número aleatório entre 1 e o valor informado.</p>
+        <label for="maxNumber">Máximo:</label>
+        <input type="number" id="maxNumber" min="1" placeholder="Digite um número">
+        <button id="drawNumberBtn">Sortear Número</button><br/><br/>
+        <button id="clearNumberBtn">Reiniciar</button>
+        <div id="numberResult">--</div>
+        <div id="numberTimestamp" class="timestamp"></div>
+      </div>
+  </div>
+
+  <script>
+    // Seção 1: Sorteio de candidatos
+    const candidates = [
+      "Gilmar José da Silva Ribeiro Júnior",
+      "Ricardo Riccio Oliveira",
+      "Valdeyer Galvão dos Reis"
+    ];
+    const candidateListEl = document.getElementById('candidateList');
+    const resultEl = document.getElementById('result');
+    const timestampEl = document.getElementById('timestamp');
+    const drawBtn = document.getElementById('drawBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function renderCandidates() {
+      candidateListEl.innerHTML = '';  
+      candidates.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        candidateListEl.appendChild(li);
+      });
+    }
+    function drawCandidate() {
+      const randomIndex = Math.floor(Math.random() * candidates.length);
+      resultEl.textContent = candidates[randomIndex];
+      timestampEl.textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
+    }
+    function clearCandidate() {
+      resultEl.textContent = '--';
+      timestampEl.textContent = '';
+    }
+    drawBtn.addEventListener('click', drawCandidate);
+    clearBtn.addEventListener('click', clearCandidate);
+    renderCandidates();
+
+    // Seção 2: Sorteio de perguntas
+    const questions = [
+      { eixo: "Gestão", text: "Como o candidato enxerga os profissionais terceirizados no IGM e quais ações pretende implementar para garantir a valorização dos colaboradores no IGM? E quais políticas de inclusão dos terceirizados nas ações internas do IGM, como treinamentos, eventos e programas de bem-estar?" },
+      { eixo: "Gestão", text: "Você possui a experiência e o capital político necessários para assumir a diretoria do IGM?" },
+      { eixo: "Gestão", text: "Considerando que a força de trabalho terceirizada na gestão do IGM FIOCRUZ é numerosa e desempenha um papel essencial no funcionamento do Instituto, quais são suas propostas concretas para a valorização desses profissionais? De que forma pretende atuar para garantir melhores condições contratuais, salários mais justos, acesso à capacitação profissional, bem como a inclusão em programas de atividades físicas e práticas integrativas que promovam saúde e bem-estar?" },
+      { eixo: "Gestão", text: "Quais estratégias e tecnologias o candidato pretende implementar para tornar a gestão mais eficiente, transparente e inovadora? E como planeja envolver a equipe, promover a inovação e garantir a sustentabilidade financeira do instituto?" },
+      { eixo: "Gestão", text: "Como o candidato planeja garantir uma distribuição equitativa e eficiente dos recursos entre as diferentes vice-diretorias, levando em consideração as necessidades específicas de cada área?" },
+      { eixo: "Gestão", text: "Quais estratégias o candidato pretende implementar para melhorar a comunicação interna e promover uma maior integração entre as equipes do instituto?" },
+      { eixo: "Pesquisa", text: "Candidato quais estratégias e inovações pretendem implementar para fortalecer o instituto e garantir que ele continue sendo uma referência em pesquisa e saúde no futuro?" },
+      { eixo: "Gestão", text: "Há bastante nebulosidade acerca dos critérios adotados para recebimento de bolsas da Fiotec por parte de servidores, principalmente na área de gestão, onde poucos ou nenhum recebe. Sabemos que em outras unidades descentralizadas, mormente na Fiocruz-RJ, servidores da gestão recebem bolsas da Fiotec. Objetivamente o que os senhores pretendem fazer para criar mecanismos que incluam estes servidores em projetos que paguem bolsa Fiotec, até para possibilitar a equiparação ao que já vem sendo feito fora do IGM?" },
+      { eixo: "Pesquisa", text: "A estrutura física do IGM, em especial os espaços físicos dos laboratórios, tem limitado a expansão da pesquisa no IGM. Isso inclui a falta de espaços físico para instalação de novos equipamentos de análises e apoio (como geladeiras e freezers), além da criação de novos laboratórios. Uma vez que isso dependende de planejamento estratégico de longo prazo, quais são os seus planos para a expansão da estrutura física do IGM para os próximos 10, 15 e 20 anos?" },
+      { eixo: "Gestão", text: "Como o candidato pretende lidar com os desafios relacionados à limitação e adequação dos espaços físicos atuais? Há planos de ampliação, modernização, reforma ou reestruturação? E sobre o estacionamento, quais as propostas para melhorar a oferta de vagas e a organização desse espaço para atender à demanda atual dos servidores, terceirizados e visitantes?" },
+      { eixo: "Pesquisa", text: "Como o candidato planeja garantir a aplicação efetiva do Marco Legal de Ciência e Tecnologia no instituto, promovendo inovação, colaboração e o fortalecimento da pesquisa científica?" },
+      { eixo: "Pesquisa", text: "Quais ações específicas o candidato pretende implementar para aumentar a captação de recursos do instituto, e como planeja envolver diferentes parceiros e fontes de financiamento para alcançar esses objetivos?" },
+      { eixo: "Pesquisa", text: "Candidato quais são as suas propostas para ampliar e melhorar as plataformas tecnológicas do instituto, a fim de torná-las mais acessíveis e eficientes para os usuários?" },
+      { eixo: "Pesquisa", text: "Candidato quais estratégias pretende implementar para fortalecer a comunicação e a colaboração entre o Instituto Gonçalo Moniz, a comunidade local e os parceiros, de modo a garantir que as ações desenvolvidas tenham um impacto mais amplo e participativo?" },
+      { eixo: "Gestão", text: "Como o candidato pretende garantir a continuidade da manutenção e atualização dos sistemas internos, evitando falhas e defasagens tecnológicas? Existe a intenção de investir em inovação tecnológica para tornar os processos internos mais ágeis, seguros e eficientes? Se sim, de que forma?" },
+      { eixo: "Gestão", text: "Quais as propostas do candidato para promover a capacitação e a valorização das equipes de trabalho no instituto? E como pretende aprimorar os contratos de terceirização para garantir maior eficiência, qualidade e bem-estar dos colaboradores?" },
+      { eixo: "Pesquisa", text: "Quais estratégias e métodos o candidato pretende implementar para monitorar de forma eficaz os indicadores de pesquisa, gestão e ensino para garantir melhorias contínuas?" },
+      { eixo: "Pesquisa", text: "Quais estratégias o candidato pretende implementar para fortalecer e expandir os projetos de inovação e pesquisa clínica no instituto? E como pretende envolver a equipe, parceiros e a comunidade nesse processo?" },
+      { eixo: "Gestão", text: "Candidato, quais estratégias e ações pretende implementar para assegurar que o Programa de Gestão e Desempenho seja realmente efetivo na nossa instituição, promovendo melhorias contínuas e engajamento de toda a equipe?" },
+      { eixo: "Gestão", text: "Como tornar a Fiocruz Bahia acessível para todos e mais diversas? Quais são as suas propostas para aumentar a diversidade de gênero e raça no IGM?" },
+      { eixo: "Ensino", text: "Como planeja fortalecer o Programa de Estágio Curricular do IGM, garantindo não apenas o desenvolvimento prático dos estagiários(as), mas também a integração em projetos importantes dentro do IGM?" },
+      { eixo: "Gestão", text: "Quais a ações o candidato tomará para o fortalecimento do Núcleo de Saúde do Trabalhador e regularização dos exames periódicos para os servidores, uma vez que a COGEPE não tem conseguido garantir a realização dos periódicos nas unidades regionais?" },
+      { eixo: "Pesquisa", text: "Nos últimos anos, a Fiocruz Bahia tem ampliado a sua relação com os territórios na Bahia, principalmente os em vulnerabilizados.  Qual a proposta do candidato para ampliar essas relações?" },
+      { eixo: "Gestão", text: "Candidato, você faria esforços e/ou aceitaria ser indicado pelo presidente da Fiocruz caso não seja o primeiro lugar na Eleição?" },
+      { eixo: "Gestão", text: "É inegável o protagonismo do IGM nas pesquisas científicas na Bahia, no Brasil e no exterior. Com mais investimentos em pessoal das áreas meio (compras e informática, por exemplo), haveria maior facilidade para o desenvolvimento dos resultados das pesquisas, com menor desgaste nos relacionamentos de trabalho. Você poderia comentar sobre como incrementar os serviços das áreas meio em sua gestão?" },
+      { eixo: "Gestão", text: "Considerando o tamanho da infraestrutura disponível, a capacidade e espaço disponível do IGM parecem esgotados, com grupos de pesquisa inteiros ocupando espaços fora do campus. Qual será a sua estratégia para acomodar novos servidores e permitir a ampliação das pesquisas no IGM? Envolve recursos extra-orçamentários à unidade e, neste code truncated for brevity..." }
+    ];
+    const axisSelectEl = document.getElementById('axisSelect');
+    const drawQuestionBtn = document.getElementById('drawQuestionBtn');
+    const clearQuestionBtn = document.getElementById('clearQuestionBtn');
+    const questionDisplayEl = document.getElementById('questionDisplay');
+    const questionTimestampEl = document.getElementById('questionTimestamp');
+    const toggleListBtn = document.getElementById('toggleListBtn');
+    const questionListEl = document.getElementById('questionList');
+
+    function drawQuestion() {
+      const eixo = axisSelectEl.value;
+      const filtered = questions.filter(q => q.eixo === eixo);
+      const selected = filtered[Math.floor(Math.random() * filtered.length)];
+      questionDisplayEl.textContent = selected.text;
+      questionTimestampEl.textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
+    }
+    function clearQuestion() {
+      questionDisplayEl.textContent = '--';
+      questionTimestampEl.textContent = '';
+    }
+
+    drawQuestionBtn.addEventListener('click', drawQuestion);
+    clearQuestionBtn.addEventListener('click', clearQuestion);
+
+    function renderQuestionList() {
+      questionListEl.innerHTML = '';
+      const grouped = {};
+      questions.forEach(q => {
+        if (!grouped[q.eixo]) grouped[q.eixo] = [];
+        grouped[q.eixo].push(q.text);
+      });
+      for (const eixo in grouped) {
+        const strong = document.createElement('strong');
+        strong.textContent = eixo;
+        questionListEl.appendChild(strong);
+        grouped[eixo].forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          questionListEl.appendChild(li);
+        });
+      }
+    }
+
+    toggleListBtn.addEventListener('click', () => {
+      const isHidden = questionListEl.style.display === 'none' || !questionListEl.style.display;
+      questionListEl.style.display = isHidden ? 'block' : 'none';
+      toggleListBtn.textContent = isHidden ? 'Ocultar todas as perguntas' : 'Mostrar todas as perguntas';
+    });
+
+    renderQuestionList();
+
+     // Seção 3: Sorteio de número
+     const maxNumberEl = document.getElementById('maxNumber');
+    const drawNumberBtn = document.getElementById('drawNumberBtn');
+    const clearNumberBtn = document.getElementById('clearNumberBtn');
+    const numberResultEl = document.getElementById('numberResult');
+    const numberTimestampEl = document.getElementById('numberTimestamp');
+
+    function drawNumber() {
+      const max = parseInt(maxNumberEl.value);
+      if (!isNaN(max) && max > 0) {
+        const randomNum = Math.floor(Math.random() * max) + 1;
+        numberResultEl.textContent = randomNum;
+        numberTimestampEl.textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
+      } else {
+        alert('Por favor, informe um número válido.');
+      }
+    }
+
+    function clearNumber() {
+      maxNumberEl.value = '';
+      numberResultEl.textContent = '--';
+      numberTimestampEl.textContent = '';
+    }
+
+    drawNumberBtn.addEventListener('click', drawNumber);
+    clearNumberBtn.addEventListener('click', clearNumber);
+  </script>
+</body>
+</html>
