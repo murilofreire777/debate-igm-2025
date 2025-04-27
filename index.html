@@ -166,11 +166,14 @@
 
   <script>
     // Seção 1: Sorteio de candidatos
-    const candidates = [
+    const candidatesOriginal = [
       "Gilmar José da Silva Ribeiro Júnior",
       "Ricardo Riccio Oliveira",
       "Valdeyer Galvão dos Reis"
     ];
+
+    let candidatesAvailable = [...candidatesOriginal]; // Cópia para manipular
+
     const candidateListEl = document.getElementById('candidateList');
     const resultEl = document.getElementById('result');
     const timestampEl = document.getElementById('timestamp');
@@ -178,24 +181,39 @@
     const clearBtn = document.getElementById('clearBtn');
 
     function renderCandidates() {
-      candidateListEl.innerHTML = '';  
-      candidates.forEach(name => {
+      candidateListEl.innerHTML = '';
+      candidatesAvailable.forEach(name => {
         const li = document.createElement('li');
         li.textContent = name;
         candidateListEl.appendChild(li);
       });
     }
+
     function drawCandidate() {
-      const randomIndex = Math.floor(Math.random() * candidates.length);
-      resultEl.textContent = candidates[randomIndex];
+      if (candidatesAvailable.length === 0) {
+        resultEl.textContent = "Todos os candidatos já foram sorteados!";
+        timestampEl.textContent = '';
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * candidatesAvailable.length);
+      const selectedCandidate = candidatesAvailable[randomIndex];
+      resultEl.textContent = selectedCandidate;
       timestampEl.textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
+      candidatesAvailable.splice(randomIndex, 1); // Remove o sorteado
+      renderCandidates(); // Atualiza lista exibida
     }
+
     function clearCandidate() {
+      candidatesAvailable = [...candidatesOriginal]; // Restaura lista original
       resultEl.textContent = '--';
       timestampEl.textContent = '';
+      renderCandidates();
     }
+
     drawBtn.addEventListener('click', drawCandidate);
     clearBtn.addEventListener('click', clearCandidate);
+
+    // Inicializa a lista
     renderCandidates();
 
     // Seção 2: Sorteio de perguntas
