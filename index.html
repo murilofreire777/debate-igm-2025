@@ -5,27 +5,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sorteiador para debate de Diretor IGM/Fiocruz Bahia</title>
   <style>
-    body { margin:0; font-family: Arial, sans-serif; }
-    .header { text-align: center; padding: 20px; background-color: #f5f5f5; }
-    .header h1 { margin: 0; font-size: 1.5em; }
-    .header .subtitle { margin-top: 5px; font-size: 0.9em; color: #666; }
-    .container { display: flex; height: calc(100vh - 100px); }
-    .section { flex: 3; padding: 20px; box-sizing: border-box; border-right: 1px solid #ccc; overflow-y: auto; }
-    #section2 { flex: 4; }
-    #section3 { flex: 4; }
-    .section:last-child { border-right: none; }
-    .section h2 { margin-top: 0; }
-    .section p.description { margin: 5px 0 15px 0; font-size: 0.85em; color: #555; }
-    .candidate-list { list-style: none; padding: 0; }
-    .candidate-list li { margin: 5px 0; }
-    .question-list { display: none; margin-top: 10px; list-style: disc; font-size: 0.8em; padding-left: 20px; }
-    .question-list li { margin: 4px 0; }
-    .question-list strong { display: block; list-style: none; margin-top: 10px; font-size: 1em; }
-    .result, #questionDisplay, #numberResult { margin: 20px 0; font-size: 1.2em; font-weight: bold; }
-    .timestamp, #questionTimestamp, #numberTimestamp { font-size: 0.8em; color: #666; }
-    button, select, input[type="number"] { padding: 8px 12px; font-size: 1em; cursor: pointer; margin-right: 5px; }
-    #toggleListBtn { margin-top: 10px; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+    }
+  
+    .header {
+      text-align: center;
+      padding: 20px;
+      background-color: #004080;
+      color: white;
+    }
+  
+    .header h1 {
+      margin: 0;
+      font-size: 1.8em;
+    }
+  
+    .header .subtitle {
+      margin-top: 5px;
+      font-size: 1em;
+      font-weight: 300;
+      color: #d0d0d0;
+    }
+  
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 20px;
+      justify-content: center;
+    }
+  
+    .section {
+      background: white;
+      flex: 1 1 300px;
+      min-width: 300px;
+      max-width: 400px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .section h2 {
+      margin-top: 0;
+      color: #004080;
+      font-size: 1.3em;
+    }
+  
+    .section p.description {
+      margin: 5px 0 15px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  
+    .candidate-list, .question-list {
+      list-style: circle;
+      margin-top: 10px;
+      font-size: 0.95em;
+    }
+
+    .question-list {
+      list-style: decimal inside;
+      display: none;
+      padding-left: 0;
+    }
+  
+    .candidate-list li, .question-list li {
+      margin: 6px 0;
+    }
+  
+    .result, #questionDisplay, #numberResult {
+      margin: 20px 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .timestamp, #questionTimestamp, #numberTimestamp {
+      font-size: 0.8em;
+      color: #888;
+    }
+  
+    button, select, input[type="number"] {
+      padding: 10px 15px;
+      font-size: 1em;
+      margin: 5px 5px 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #e6f0ff;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+  
+    button:hover, select:hover, input[type="number"]:hover {
+      background-color: #cce0ff;
+      border-color: #80bfff;
+    }
+  
+    #toggleListBtn {
+      margin-top: 15px;
+    }
+  
+    strong {
+      margin-top: 15px;
+      display: block;
+      color: #004080;
+    }
+  
+    input[type=\"number\"] {
+      width: 100px;
+    }
   </style>
+  
 </head>
 <body>
   <div class="header">
@@ -108,47 +202,58 @@
     const questions = [
       { eixo: "Gestão", text: "Como o candidato enxerga os profissionais terceirizados no IGM e quais ações pretende implementar para garantir a valorização dos colaboradores no IGM? E quais políticas de inclusão dos terceirizados nas ações internas do IGM, como treinamentos, eventos e programas de bem-estar?" },
       { eixo: "Gestão", text: "Você possui a experiência e o capital político necessários para assumir a diretoria do IGM?" },
-      { eixo: "Gestão", text: "Considerando que a força de trabalho terceirizada na gestão do IGM FIOCRUZ é numerosa e desempenha um papel essencial no funcionamento do Instituto, quais são suas propostas concretas para a valorização desses profissionais?" },
-      { eixo: "Gestão", text: "Quais estratégias e tecnologias o candidato pretende implementar para tornar a gestão mais eficiente, transparente e inovadora?" },
-      { eixo: "Gestão", text: "Como o candidato planeja garantir uma distribuição equitativa e eficiente dos recursos entre as diferentes vice-diretorias?" },
-      { eixo: "Gestão", text: "Quais estratégias o candidato pretende implementar para melhorar a comunicação interna e promover uma maior integração entre as equipes?" },
+      { eixo: "Gestão", text: "Considerando que a força de trabalho terceirizada na gestão do IGM FIOCRUZ é numerosa e desempenha um papel essencial no funcionamento do Instituto, quais são suas propostas concretas para a valorização desses profissionais? De que forma pretende atuar para garantir melhores condições contratuais, salários mais justos, acesso à capacitação profissional, bem como a inclusão em programas de atividades físicas e práticas integrativas que promovam saúde e bem-estar?" },
+      { eixo: "Gestão", text: "Quais estratégias e tecnologias o candidato pretende implementar para tornar a gestão mais eficiente, transparente e inovadora? E como planeja envolver a equipe, promover a inovação e garantir a sustentabilidade financeira do instituto?" },
+      { eixo: "Gestão", text: "Como o candidato planeja garantir uma distribuição equitativa e eficiente dos recursos entre as diferentes vice-diretorias, levando em consideração as necessidades específicas de cada área?" },
+      { eixo: "Gestão", text: "Quais estratégias o candidato pretende implementar para melhorar a comunicação interna e promover uma maior integração entre as equipes do instituto?" },
       { eixo: "Pesquisa", text: "Candidato quais estratégias e inovações pretendem implementar para fortalecer o instituto e garantir que ele continue sendo uma referência em pesquisa e saúde no futuro?" },
-      { eixo: "Gestão", text: "Há bastante nebulosidade acerca dos critérios adotados para recebimento de bolsas da Fiotec. Objetivamente o que pretende fazer para criar mecanismos que incluam os servidores da gestão?" },
-      { eixo: "Pesquisa", text: "A estrutura física do IGM limita a expansão da pesquisa. Quais são seus planos para os próximos 10, 15 e 20 anos?" },
-      { eixo: "Gestão", text: "Como o candidato pretende lidar com os desafios relacionados à limitação e adequação dos espaços físicos atuais?" },
-      { eixo: "Pesquisa", text: "Como o candidato planeja garantir a aplicação efetiva do Marco Legal de Ciência e Tecnologia no instituto?" },
-      { eixo: "Pesquisa", text: "Quais ações específicas pretende implementar para aumentar a captação de recursos do instituto?" },
-      { eixo: "Pesquisa", text: "Quais são as propostas para ampliar e melhorar as plataformas tecnológicas do instituto?" },
-      { eixo: "Pesquisa", text: "Quais estratégias pretende implementar para fortalecer a comunicação e a colaboração entre o Instituto Gonçalo Moniz e a comunidade?" },
-      { eixo: "Gestão", text: "Como o candidato pretende garantir a manutenção e atualização dos sistemas internos do instituto?" },
-      { eixo: "Gestão", text: "Quais as propostas para capacitação e valorização das equipes de trabalho?" },
-      { eixo: "Pesquisa", text: "Quais estratégias e métodos pretende implementar para monitorar eficazmente indicadores de pesquisa, gestão e ensino?" },
-      { eixo: "Pesquisa", text: "Quais estratégias pretende implementar para fortalecer e expandir os projetos de inovação e pesquisa clínica?" },
-      { eixo: "Gestão", text: "Como pretende assegurar que o Programa de Gestão e Desempenho seja efetivo no IGM?" },
-      { eixo: "Gestão", text: "Quais propostas para aumentar a diversidade de gênero e raça no IGM?" },
-      { eixo: "Ensino", text: "Como planeja fortalecer o Programa de Estágio Curricular do IGM?" },
-      { eixo: "Gestão", text: "Quais ações para fortalecer o Núcleo de Saúde do Trabalhador e regularizar os exames periódicos?" },
-      { eixo: "Pesquisa", text: "Qual a proposta para ampliar a relação da Fiocruz Bahia com territórios em situação de vulnerabilidade?" },
-      { eixo: "Gestão", text: "Você aceitaria ser indicado pelo presidente da Fiocruz mesmo não sendo o primeiro colocado?" },
-      { eixo: "Gestão", text: "Como pretende incrementar os serviços das áreas meio (compras, informática) para apoiar as pesquisas?" },
-      { eixo: "Gestão", text: "Qual a estratégia para acomodar novos servidores e ampliar as pesquisas no IGM?" },
-      { eixo: "Pesquisa", text: "Quais estratégias pretende adotar para garantir a consecução de atividades finalísticas de pesquisa frente à lentidão burocrática?" },
-      { eixo: "Gestão", text: "Quais prioridades seriam atacadas de imediato na sua gestão considerando recursos escassos?" },
-      { eixo: "Pesquisa", text: "Quais os planos para o futuro das ações de Ciência, Desenvolvimento Tecnológico e Inovação no IGM?" },
-      { eixo: "Gestão", text: "Quais esforços para garantir adicional financeiro para servidores técnicos que se qualificam?" },
-      { eixo: "Gestão", text: "Considera viável construir um novo IGM em outra localização para atender às necessidades futuras?" },
-      { eixo: "Pesquisa", text: "O que foi feito para acomodar laboratórios aprovados no último credenciamento?" },
-      { eixo: "Gestão", text: "Quais propostas para segurança dos trabalhadores da Fiocruz Bahia?" },
-      { eixo: "Pesquisa", text: "Quais ideias para capacitação e desenvolvimento dos servidores de pesquisa?" },
-      { eixo: "Gestão", text: "Qual proposta para modernizar a gestão e seus sistemas?" },
-      { eixo: "Gestão", text: "Quais medidas para acessibilidade dentro do IGM?" },
-      { eixo: "Gestão", text: "Quais são as 3 prioridades mais viáveis localmente e que não dependem da presidência da Fiocruz?" },
-      { eixo: "Gestão", text: "Qual será a composição de vice-diretores da sua Diretoria?" },
-      { eixo: "Pesquisa", text: "Quais estratégias para aumentar o protagonismo da Fiocruz Bahia regional, nacional e internacionalmente?" },
-      { eixo: "Pesquisa", text: "Planos para reposição de técnicos em saúde pública diante da aposentadoria?" },
-      { eixo: "Pesquisa", text: "Quais planos para a expansão de atividades da Fiocruz Bahia em campo?" },
-      { eixo: "Ensino", text: "Como incentivará a internacionalização dentro do IGM?" },
-      { eixo: "Ensino", text: "Quais medidas para implementar ações afirmativas no IGM?" }
+      { eixo: "Gestão", text: "Há bastante nebulosidade acerca dos critérios adotados para recebimento de bolsas da Fiotec por parte de servidores, principalmente na área de gestão, onde poucos ou nenhum recebe. Sabemos que em outras unidades descentralizadas, mormente na Fiocruz-RJ, servidores da gestão recebem bolsas da Fiotec. Objetivamente o que os senhores pretendem fazer para criar mecanismos que incluam estes servidores em projetos que paguem bolsa Fiotec, até para possibilitar a equiparação ao que já vem sendo feito fora do IGM?" },
+      { eixo: "Pesquisa", text: "A estrutura física do IGM, em especial os espaços físicos dos laboratórios, tem limitado a expansão da pesquisa no IGM. Isso inclui a falta de espaços físico para instalação de novos equipamentos de análises e apoio (como geladeiras e freezers), além da criação de novos laboratórios. Uma vez que isso dependende de planejamento estratégico de longo prazo, quais são os seus planos para a expansão da estrutura física do IGM para os próximos 10, 15 e 20 anos?" },
+      { eixo: "Gestão", text: "Como o candidato pretende lidar com os desafios relacionados à limitação e adequação dos espaços físicos atuais? Há planos de ampliação, modernização, reforma ou reestruturação? E sobre o estacionamento, quais as propostas para melhorar a oferta de vagas e a organização desse espaço para atender à demanda atual dos servidores, terceirizados e visitantes?" },
+      { eixo: "Pesquisa", text: "Como o candidato planeja garantir a aplicação efetiva do Marco Legal de Ciência e Tecnologia no instituto, promovendo inovação, colaboração e o fortalecimento da pesquisa científica?" },
+      { eixo: "Pesquisa", text: "Quais ações específicas o candidato pretende implementar para aumentar a captação de recursos do instituto, e como planeja envolver diferentes parceiros e fontes de financiamento para alcançar esses objetivos?" },
+      { eixo: "Pesquisa", text: "Candidato quais são as suas propostas para ampliar e melhorar as plataformas tecnológicas do instituto, a fim de torná-las mais acessíveis e eficientes para os usuários?" },
+      { eixo: "Pesquisa", text: "Candidato quais estratégias pretende implementar para fortalecer a comunicação e a colaboração entre o Instituto Gonçalo Moniz, a comunidade local e os parceiros, de modo a garantir que as ações desenvolvidas tenham um impacto mais amplo e participativo?" },
+      { eixo: "Gestão", text: "Como o candidato pretende garantir a continuidade da manutenção e atualização dos sistemas internos, evitando falhas e defasagens tecnológicas? Existe a intenção de investir em inovação tecnológica para tornar os processos internos mais ágeis, seguros e eficientes? Se sim, de que forma?" },
+      { eixo: "Gestão", text: "Quais as propostas do candidato para promover a capacitação e a valorização das equipes de trabalho no instituto? E como pretende aprimorar os contratos de terceirização para garantir maior eficiência, qualidade e bem-estar dos colaboradores?" },
+      { eixo: "Pesquisa", text: "Quais estratégias e métodos o candidato pretende implementar para monitorar de forma eficaz os indicadores de pesquisa, gestão e ensino para garantir melhorias contínuas?" },
+      { eixo: "Pesquisa", text: "Quais estratégias o candidato pretende implementar para fortalecer e expandir os projetos de inovação e pesquisa clínica no instituto? E como pretende envolver a equipe, parceiros e a comunidade nesse processo?" },
+      { eixo: "Gestão", text: "Candidato, quais estratégias e ações pretende implementar para assegurar que o Programa de Gestão e Desempenho seja realmente efetivo na nossa instituição, promovendo melhorias contínuas e engajamento de toda a equipe?" },
+      { eixo: "Gestão", text: "Como tornar a Fiocruz Bahia acessível para todos e mais diversas? Quais são as suas propostas para aumentar a diversidade de gênero e raça no IGM?" },
+      { eixo: "Ensino", text: "Como planeja fortalecer o Programa de Estágio Curricular do IGM, garantindo não apenas o desenvolvimento prático dos estagiários(as), mas também a integração em projetos importantes dentro do IGM?" },
+      { eixo: "Gestão", text: "Quais a ações o candidato tomará para o fortalecimento do Núcleo de Saúde do Trabalhador e regularização dos exames periódicos para os servidores, uma vez que a COGEPE não tem conseguido garantir a realização dos periódicos nas unidades regionais?" },
+      { eixo: "Pesquisa", text: "Nos últimos anos, a Fiocruz Bahia tem ampliado a sua relação com os territórios na Bahia, principalmente os em vulnerabilizados.  Qual a proposta do candidato para ampliar essas relações?" },
+      { eixo: "Gestão", text: "Candidato, você faria esforços e/ou aceitaria ser indicado pelo presidente da Fiocruz caso não seja o primeiro lugar na Eleição?" },
+      { eixo: "Gestão", text: "É inegável o protagonismo do IGM nas pesquisas científicas na Bahia, no Brasil e no exterior. Com mais investimentos em pessoal das áreas meio (compras e informática, por exemplo), haveria maior facilidade para o desenvolvimento dos resultados das pesquisas, com menor desgaste nos relacionamentos de trabalho. Você poderia comentar sobre como incrementar os serviços das áreas meio em sua gestão?" },
+      { eixo: "Gestão", text: "Considerando o tamanho da infraestrutura disponível, a capacidade e espaço disponível do IGM parecem esgotados, com grupos de pesquisa inteiros ocupando espaços fora do campus. Qual será a sua estratégia para acomodar novos servidores e permitir a ampliação das pesquisas no IGM? Envolve recursos extra-orçamentários à unidade e, neste caso, de onde virão?" },
+      { eixo: "Gestão", text: "O IGM tem muitas áreas carentes em infraestrutura e  equipamento. Sabemos que o cobertor é curto e que precisaremos otimizar os recursos. Como suas propostas se alinham com essa perspectiva?" },
+      { eixo: "Pesquisa", text: "Muitas iniciativas, como contratações, acordos de cooperação, inovação e parcerias interinstitucionais e internacionais, enfrentam lentidão burocrática de setores no IGM. Quais estratégias pretende adotar para  garantir a consecução destas atividades diretamente relacionadas ao objetivo finalístico do IGM (Pesquisa)?" },
+      { eixo: "Gestão", text: "Diante do elenco de propostas realizadas pelos candidatos, quais seriam as prioridades a serem atacadas de imediato na sua Gestão? Sabendo-se que os recursos são escassos e as necessidades ilimitadas." },
+      { eixo: "Pesquisa", text: "Quais são os seus planos destinados ao futuro das ações de Ciência, Desenvolvimento Tecnológico e Inovação do IGM, considerando a sua magnitude científica entre as unidades da Fiocruz?" },
+      { eixo: "Gestão", text: "Hoje, não importa se o servidor técnico possui especialização, mestrado ou doutorado, o valor de adicional é o mesmo, e por isso muitos não se sentem motivados a se qualificar, pois não ganharão nada a mais. Para os servidores técnicos que têm o desejo de fazer um curso de pós-graduação, se tornando ainda mais capacitados para apoiar à pesquisa, quais os esforços do candidato para que seja ofertado a esses servidores um adicional financeiro?" },
+      { eixo: "Gestão", text: "O IGM foi construído há mais de 20 anos encima de uma estrutura antiga algumas vezes como reforma e não novas estruturas. Isso leva aos problemas atuais com rede elétrica etc. com a possibilidade de obter recursos para os gargalos atuais de espaços não seria melhor construir um novo IGM com infraestrutura especial para a necessidade de pesquisa científica avançadas e necessidade especificidades solicitadas pelos laboratórios do IGM credenciados para o período de 2024-2030 num local fora do Horto Florestal atualmente uma área residencial e comercial ? Possibilidade de doação de terreno público pelos governos, federal, estadual ou municipal não seria grande problema. Por exemplo área nas proximidades ao parque tecnológico." },
+      { eixo: "Pesquisa", text: "Após a aprovação do último credenciamento/recredenciamento, onde foram aprovadas as propostas? Não temos conhecimento de nenhuma proposta de acomodação que tenha sido ajustada de acordo com as necessidades dos espaços solicitados dentro dos laboratórios aprovados para desenvolver as atividades propostas. Houve alguma reunião do CD ou da diretoria para atender às demandas solicitadas pelos laboratórios aprovados?" },
+      { eixo: "Gestão", text: "O que você pensa com relação a segurança dos trabalhadores da Fiocruz Bahia? Quais são os seus planos?" },
+      { eixo: "Pesquisa", text: "Quais são as ideias do candidato em relação à capacitação e desenvolvimento dos servidores em atividade de pesquisa em consonância com as competências científicas do IGM?" },
+      { eixo: "Gestão", text: "Qual a proposta do candidato para modernizar a gestão, seus sistemas e procedimentos?" },
+      { eixo: "Gestão", text: "Quais medidas serão implementadas para acessibilidade dentro do IGM para pessoas com deficiência em sua gestão?" },
+      { eixo: "Gestão", text: "As promessas de campanha dos candidatos são muitas para serem cumpridas nesse mandato de 4 anos. Quais são as 3 prioridades mais viáveis localmente, e que não dependem da presidência da Fiocruz?" },
+      { eixo: "Gestão", text: "Qual será a composição de vice-diretores da sua Diretoria? Poderia citar potenciais ocupantes das posições de VD-Ensino, Pesquisa e Gestão?" },
+      { eixo: "Pesquisa", text: "Há pouca comunicação entre os atores de pesquisa e gestão. O que pretende fazer para dar visibilidade e transparência às ações de cada área?" },
+      { eixo: "Pesquisa", text: "Como pretende usar o Marco Legal de C,T&I a favor da Unidade?" },
+      { eixo: "Ensino", text: "Como você fará o incentivo a internacionalização dentro do IGM, considerando que essa é uma exigência da CAPES e faz parte do processo de desenvolvimento de cooperações extramuros institucional?" },
+      { eixo: "Gestão", text: "Atualmente, os servidores de gestão estão fazendo teses em assuntos puramente de pesquisa científica e não estão fazendo em assuntos de gestão. Como a Instituição pode aprimorar os processos de gestão sem desenvolver teses em estratégias de melhoria da gestão?" },
+      { eixo: "Gestão", text: "Como você vê o futuro da Fiocruz em um terreno que ainda não foi doado, e que certamente terá dificuldade de expansão em uma área tão restrita?" },
+      { eixo: "Gestão", text: "Quais são as propostas para ampliação da inclusão e acessibilidade no IGM?" },
+      { eixo: "Gestão", text: "Temos um problema crônico de falta de espaços físicos que não acompanham a dinâmica de expansão das atividades da Fiocruz.  Qual a proposta do candidato para dar conta desta demanda?" },
+      { eixo: "Ensino", text: "Quais medidas serão implementadas para incrementar concretamente as ações afirmativas na Instituição?" },
+      { eixo: "Gestão", text: "Salvo raras exceções, existe uma grande barreira entre administração/gestão e os pesquisadores, dificultando a execução das atividades dos projetos. Considerando que a pesquisa é a atividade principal da Instituição, a falta de respostas e de resolução das queixas dos pesquisadores é um problema insolúvel porque o Sistema  está acima da direção? Existem maneiras de algumas das queixas serem atendidas sem responsabilizar o excesso de burocracia?" },
+      { eixo: "Gestão", text: "Considerando a necessidade de mensurar as entregas de setores intermediários essenciais para a consecução das atividades finalísticas do IGM (a Pesquisa), a exemplo de Compras e TI, o candidato utilizará de índices e indicadores para realizar seu monitoramento efetivo?" },
+      { eixo: "Gestão", text: "Poderia citar possíveis candidatos a vice de pesquisa, gestão e ensino caso eleito?" },
+      { eixo: "Gestão", text: "Se não vencer a eleição por maioria de votos, mas ainda compondo a lista tríplice, você estaria disposto a ser indicado pelo presidente da Fiocruz para Diretor?" },
+      { eixo: "Pesquisa", text: "Como você vê o aumento do protagonismo da Fiocruz Bahia no âmbito regional, estadual, nacional e internacional? Quais são os seus planos?" },
+      { eixo: "Pesquisa", text: "Tendo em vista a proximidade da aposentadoria de profissionais técnicos concursados, e a necessidade deles de melhorias salariais, o que os tem forçado a tentar aprovação em outras vagas de concurso, inclusive fora do IGM, você considera que será possível em sua gestão a implementação de vagas de concurso para o cargo de técnico em saúde pública, visando repor o quantitativo de técnicos que podem desocupar seus postos? O que você pensa sobre esse cenário?" },
+      { eixo: "Pesquisa", text: "Quais são os seus planos relacionados a expansão das atividades da Fiocruz, inclusive as atividades em campo?" },
     ];
     const axisSelectEl = document.getElementById('axisSelect');
     const drawQuestionBtn = document.getElementById('drawQuestionBtn');
@@ -158,14 +263,14 @@
     const toggleListBtn = document.getElementById('toggleListBtn');
     const questionListEl = document.getElementById('questionList');
 
-  function drawQuestion() {
+    function drawQuestion() {
       const eixo = document.getElementById('axisSelect').value;
       const filtered = questions.filter(q => q.eixo === eixo);
       const selectedIndex = Math.floor(Math.random() * filtered.length);
       const selected = filtered[selectedIndex];
       const questionsInEixo = questions.filter(q => q.eixo === eixo);
       const questionNumber = questionsInEixo.findIndex(q => q.text === selected.text) + 1;
-    
+
       document.getElementById('questionDisplay').textContent = `Pergunta ${questionNumber}: ${selected.text}`;
       document.getElementById('questionTimestamp').textContent = 'Sorteio realizado em ' + new Date().toLocaleString();
     }
@@ -178,28 +283,38 @@
     drawQuestionBtn.addEventListener('click', drawQuestion);
     clearQuestionBtn.addEventListener('click', clearQuestion);
 
-   function renderQuestionList() {
+    function renderQuestionList() {
       const questionListEl = document.getElementById('questionList');
       questionListEl.innerHTML = '';
       const grouped = {};
-    
+
       questions.forEach(q => {
         if (!grouped[q.eixo]) grouped[q.eixo] = [];
         grouped[q.eixo].push(q);
       });
-    
-      let questionCounter = 1;
+
       for (const eixo in grouped) {
+        const eixoContainer = document.createElement('div');
+        eixoContainer.style.marginBottom = '20px';
+
         const strong = document.createElement('strong');
         strong.textContent = eixo;
-        questionListEl.appendChild(strong);
-    
-        grouped[eixo].forEach((q) => {
+        strong.style.display = 'block';
+        strong.style.marginBottom = '10px';
+        eixoContainer.appendChild(strong);
+
+        const ul = document.createElement('ul');
+        ul.style.listStyleType = 'decimal';
+        ul.style.paddingLeft = '20px';
+
+        grouped[eixo].forEach((q, index) => {
           const li = document.createElement('li');
-          li.textContent = `Pergunta ${questionCounter}: ${q.text}`;
-          questionListEl.appendChild(li);
-          questionCounter++;
+          li.textContent = `Pergunta ${index + 1}: ${q.text}`;
+          ul.appendChild(li);
         });
+
+        eixoContainer.appendChild(ul);
+        questionListEl.appendChild(eixoContainer);
       }
     }
 
